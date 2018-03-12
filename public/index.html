@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Palette-Picker</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+  <body>
+    <main>
+      <h1>Palette Picker</h1>
+      <section class="palette-picker">
+        <article class="palette">
+          <div class="color-boxes color-1">
+            <button class="color-box-lock"></button>
+            #FFFFFF
+          </div>
+          <div class="color-boxes color-2">
+            <button class="color-box-lock"></button>
+            #FFFFFF
+          </div>
+          <div class="color-boxes color-3">
+            <button class="color-box-lock"></button>
+            #FFFFFF
+          </div>
+          <div class="color-boxes color-4">
+            <button class="color-box-lock"></button>
+            #FFFFFF
+          </div>
+          <div class="color-boxes color-5">
+            <button class="color-box-lock"></button>
+            #FFFFFF
+          </div>
+        </article>
+        <button class="generate-palette-btn">Generate New Palette!</button>
+        <form class="new-palatte-form" action="submit">
+          <select name="projects" id="project-dropdown"></select>
+          <input type="text" class="palatte-name" placeholder="Palette Name">
+          <button class="save-palatte-btn">Save Palatte</button>
+        </form>
+      </section>
+      <section class="saved-projects">
+        <form class="create-project-form" action="submit">
+          <label for="project-name-input">
+            Create a new project:
+            <input id="project-name-input" type="text" placeholder="New Project Name">
+          </label>
+          <button class="save-project-btn">Save Project</button>
+        </form>
+        <section class="project-container">
+          <article class="project" id="project 1">
+            <h1 class="project-name">Project 1</h1>
+            <div class="project-palettes">
+              <section class="project-palette">
+                <p class="project-palette-name">Palette 1</p>
+                <div class="project-palette-color-1">1</div>
+                <div class="project-palette-color-2">2</div>
+                <div class="project-palette-color-3">3</div>
+                <div class="project-palette-color-4">4</div>
+                <div class="project-palette-color-5">5</div>
+                <button class="project-palette-delete-btn">Delete Me</button>
+              </section>
+              <section class="project-palette">
+                  <p class="project-palette-name">Warm Combo</p>
+                  <div class="project-palette-color-1">1</div>
+                  <div class="project-palette-color-2">2</div>
+                  <div class="project-palette-color-3">3</div>
+                  <div class="project-palette-color-4">4</div>
+                  <div class="project-palette-color-5">5</div>
+                  <button class="project-palette-delete-btn">Delete Me</button>
+              </section>
+            </div>
+          </article>
+          <article class="project" id="project 1">
+              <h1 class="project-name">Project 2</h1>
+              <div class="project-palettes">
+                <section class="project-palette">
+                  <p class="project-palette-name">Nature</p>
+                  <div class="project-palette-color-1">1</div>
+                  <div class="project-palette-color-2">2</div>
+                  <div class="project-palette-color-3">3</div>
+                  <div class="project-palette-color-4">4</div>
+                  <div class="project-palette-color-5">5</div>
+                  <button class="project-palette-delete-btn">Delete Me</button>
+                </section>
+              </div>
+            </article>
+        </section>
+      </section>
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script src="./js/scripts.js"></script>
+    </main>
+  </body>
+</html>
