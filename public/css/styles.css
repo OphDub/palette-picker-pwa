@@ -31,6 +31,22 @@ main {
   padding: 10px;
 }
 
+.color-box-lock-btn {
+  width: 30px;
+  height: 30px;
+  background: rgba(0,0,0,0);
+  background-size: cover;
+  background-position: center;
+}
+
+.lock-open {
+  background-image: url("../assets/002-lock.png");
+}
+
+.lock-closed {
+  background-image: url("../assets/001-tool.png");
+}
+
 .saved-projects {
   display: flex;
   flex-direction: column;
