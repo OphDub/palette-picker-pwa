@@ -1,6 +1,8 @@
 $(document).ready(generateNewPalette);
 $('.generate-palette-btn').click(generateNewPalette);
 $('.color-box-lock-btn').click(lockColor);
+$('.project-palette-delete-btn').click(removePalette);
+$('.save-project-btn').click(createProject);
 
 $(document).keydown((event) => {
   if (event.keyCode === 32 && document.activeElement.tagName !== "INPUT") {
@@ -54,5 +56,21 @@ function lockColor (event) {
   } else {
     colorBoxes.unlock(id)
   }
+};
+
+function removePalette (event) {
+  const { id } = event.target.parentElement;
+
+  $(event.target.parentElement).remove();
+};
+
+function createProject (event) {
+  event.preventDefault();
+  const projectName = $(event.target).siblings().find('input').val();
+
+  $('.palette').children('article').contents().map(box => {
+    console.log(box);
+    
+  });
 };
 
