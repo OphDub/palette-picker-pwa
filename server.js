@@ -19,19 +19,31 @@ app.locals.palettes = [
     "id": "1",
     "name": "Palette 1",
     "project-key": "1",
-    "colors": [ "#81946A", "#F8CE9D", "#7AC2E3", "#43ADC4", "#6E498B" ]
+    "color1": "#81946A",
+    "color2": "#F8CE9D",
+    "color3": "#7AC2E3",
+    "color4": "#43ADC4",
+    "color5": "#6E498B"
   },
   {
     "id": "1",
     "name": "Not Fun",
     "project-key": "1",
-    "colors": [ "#68DE43", "#78177A", "#AC7CD6", "#7871AB", "#B9DF4C" ]
+    "color1": "#68DE43",
+    "color2": "#78177A",
+    "color3": "#AC7CD6",
+    "color4": "#7871AB",
+    "color5": "#B9DF4C"
   },
   {
     "id": "1",
     "name": "Cool Colors",
     "project-key": "2",
-    "colors": [ "#148ACC", "#42D1F1", "#9F39CD", "#4DFAFC", "#1CC9F2" ]
+    "color1": "#148ACC",
+    "color2": "#42D1F1",
+    "color3": "#9F39CD",
+    "color4": "#4DFAFC",
+    "color5": "#1CC9F2"
   },
 ];
 
