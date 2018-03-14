@@ -27,6 +27,7 @@ main {
   justify-content: flex-end;
   border: 1px solid black;
   height: 100px;
+  width: 75px;
   margin: 0px 5px;
   padding: 10px;
 }
@@ -40,11 +41,11 @@ main {
 }
 
 .lock-open {
-  background-image: url("../assets/002-lock.png");
+  background-image: url("../assets/unlocked.svg");
 }
 
 .lock-closed {
-  background-image: url("../assets/001-tool.png");
+  background-image: url("../assets/locked.svg");
 }
 
 .saved-projects {
@@ -66,12 +67,32 @@ main {
   justify-content: space-between;
 }
 
+.project {
+  border: 1px solid black;
+  padding: 15px;
+}
+
 .project-palette {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+.project-palette-colors {
+  display: flex;
+  flex-direction: row:;
 }
 
 .project-palette-color {
   border: 1px solid black;
   min-width: 15px;
+}
+
+.project-palette-delete-btn {
+  width: 20px;
+  height: 20px;
+  background: rgba(0,0,0,0);
+  background-size: cover;
+  background-position: center;
+  background-image: url("../assets/trash.svg");
 }
