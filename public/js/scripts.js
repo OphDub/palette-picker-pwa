@@ -71,14 +71,45 @@ function createProject (event) {
   const project = Object.assign({ project_name: projectName });
 
   //pass project to backend
+  prependProject(project);
+  clearProjectInput();
 };
 
 function savePalette (event) {
   event.preventDefault();
+  const paletteName = $('.palette-name').val();
   const colorBoxes = $('.palette').children('article');
-  const hexCodes = Array.from(colorBoxes).map(box => box.innerText);
-  const palette = Object.assign({ palette: [{hexCodes}]});
+  const colors = Array.from(colorBoxes).map(box => box.innerText);
+  const palette = Object.assign({ palette_name: paletteName, colors });
+  console.log(palette);
 
   //pass palette to backend
-}
+  prependPalette(palette);
+  clearPaletteNameInput();
+};
 
+function prependProject (project) {
+  const { project_name }  = project;
+  const projectTemplate =
+    `<article class="project" id="project-1">
+      <h1 class="project-name">${project_name}</h1>
+      <div class="project-palettes">
+      </div>
+    </article>`;
+
+  $('.project-container').prepend(projectTemplate);
+};
+
+function prependPalette (palette) {
+  const {
+    palette_name,
+  } = palette;
+};
+
+function clearProjectInput () {
+  $('#project-name-input').val('');
+};
+
+function clearPaletteNameInput () {
+  $('.palette-name').val('');
+};
