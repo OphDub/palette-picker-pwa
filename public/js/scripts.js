@@ -3,6 +3,7 @@ $('.generate-palette-btn').click(generateNewPalette);
 $('.color-box-lock-btn').click(lockColor);
 $('.project-palette-delete-btn').click(removePalette);
 $('.save-project-btn').click(createProject);
+$('.save-palette-btn').click(savePalette);
 
 $(document).keydown((event) => {
   if (event.keyCode === 32 && document.activeElement.tagName !== "INPUT") {
@@ -67,10 +68,17 @@ function removePalette (event) {
 function createProject (event) {
   event.preventDefault();
   const projectName = $(event.target).siblings().find('input').val();
+  const project = Object.assign({ project_name: projectName });
 
-  $('.palette').children('article').contents().map(box => {
-    console.log(box);
-    
-  });
+  //pass project to backend
 };
+
+function savePalette (event) {
+  event.preventDefault();
+  const colorBoxes = $('.palette').children('article');
+  const hexCodes = Array.from(colorBoxes).map(box => box.innerText);
+  const palette = Object.assign({ palette: [{hexCodes}]});
+
+  //pass palette to backend
+}
 
