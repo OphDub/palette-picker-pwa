@@ -1,8 +1,8 @@
-$('.generate-palette-btn').click(generateNewPalette);
-$('.color-box-lock-btn').click(lockColor);
-$('.project-palette-delete-btn').click(removePalette);
-$('.save-project-btn').click(createProject);
-$('.save-palette-btn').click(savePalette);
+$('.generate-palette-btn').click(() => generateNewPalette());
+$('.color-box-lock-btn').click((event) => lockColor(event));
+$('.project-palette-delete-btn').click((event) => removePalette(event));
+$('.save-project-btn').click((event) => createProject(event));
+$('.save-palette-btn').click((event) => savePalette(event));
 $(document).ready(() => {
   generateNewPalette();
   loadProjects();
@@ -41,7 +41,7 @@ const colorBoxes = (() => {
   }
 })();
 
-function generateNewPalette () {
+const generateNewPalette = () => {
   colorBoxes.getBoxes().forEach(box => {
     const randomHexColor = generateRandomHex();
 
@@ -50,11 +50,11 @@ function generateNewPalette () {
   });
 };
 
-function generateRandomHex () {
+const generateRandomHex = () => {
   return '#'+Math.random().toString(16).slice(-6)
 };
 
-function lockColor (event) {
+const lockColor = (event) => {
   const { id }  = event.target.parentElement;
 
   $(event.target).toggleClass('lock-closed');
@@ -66,13 +66,13 @@ function lockColor (event) {
   }
 };
 
-function removePalette (event) {
+const removePalette = (event) => {
   const { id } = event.target.parentElement;
 
   $(event.target.parentElement).remove();
 };
 
-function createProject (event) {
+const createProject = (event) => {
   event.preventDefault();
   const projectName = $(event.target).siblings().find('input').val();
   const project = Object.assign({ project_name: projectName });
@@ -82,7 +82,7 @@ function createProject (event) {
   clearProjectInput();
 };
 
-function savePalette (event) {
+const savePalette = (event) => {
   event.preventDefault();
   const paletteName = $('.palette-name').val();
   const projectName = $('#project-dropdown').val();
@@ -105,14 +105,14 @@ const prependPalette = (projectName, palette) => {
     const colorBlock =
       `<article class="project-palette-color" style="background-color: ${color}">
       </article>`;
-    // const projectDiv = $(`${projectName}`);
-    // console.log(projectDiv);
+    const projectDiv = $(`${projectName}`);
+    console.log(projectDiv);
 
     projectDiv.append(colorBlock);
   });
 };
 
-function prependProject (project) {
+const prependProject = (project) => {
   const { project_name, id }  = project;
   const projectTemplate =
     `<article class="project" id=${id}>
@@ -124,11 +124,11 @@ function prependProject (project) {
   $('.project-container').prepend(projectTemplate);
 };
 
-function clearProjectInput () {
+const clearProjectInput = () => {
   $('#project-name-input').val('');
 };
 
-function clearPaletteNameInput () {
+const clearPaletteNameInput = () => {
   $('.palette-name').val('');
 };
 
