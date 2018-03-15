@@ -1,9 +1,16 @@
-$(document).ready(generateNewPalette);
 $('.generate-palette-btn').click(generateNewPalette);
 $('.color-box-lock-btn').click(lockColor);
 $('.project-palette-delete-btn').click(removePalette);
 $('.save-project-btn').click(createProject);
 $('.save-palette-btn').click(savePalette);
+$(document).ready(() => {
+  generateNewPalette();
+  loadProjects();
+});
+$('#project-dropdown').ready( async () => {
+  const projects = await getProjects();
+  appendProjectsToDropdown(projects);
+});
 
 $(document).keydown((event) => {
   if (event.keyCode === 32 && document.activeElement.tagName !== "INPUT") {
@@ -70,40 +77,51 @@ function createProject (event) {
   const projectName = $(event.target).siblings().find('input').val();
   const project = Object.assign({ project_name: projectName });
 
-  //pass project to backend
   prependProject(project);
+  //pass project to backend
   clearProjectInput();
 };
 
 function savePalette (event) {
   event.preventDefault();
   const paletteName = $('.palette-name').val();
+  const projectName = $('#project-dropdown').val();
   const colorBoxes = $('.palette').children('article');
   const colors = Array.from(colorBoxes).map(box => box.innerText);
   const palette = Object.assign({ palette_name: paletteName, colors });
-  console.log(palette);
 
+  if (paletteName === '') {
+    console.log('Give your palette a name you lettuce');
+    return;
+  }
+
+  prependPalette(projectName, palette);
   //pass palette to backend
-  prependPalette(palette);
   clearPaletteNameInput();
 };
 
+const prependPalette = (projectName, palette) => {
+  palette.colors.forEach(color => {
+    const colorBlock =
+      `<article class="project-palette-color" style="background-color: ${color}">
+      </article>`;
+    // const projectDiv = $(`${projectName}`);
+    // console.log(projectDiv);
+
+    projectDiv.append(colorBlock);
+  });
+};
+
 function prependProject (project) {
-  const { project_name }  = project;
+  const { project_name, id }  = project;
   const projectTemplate =
-    `<article class="project" id="project-1">
+    `<article class="project" id=${id}>
       <h1 class="project-name">${project_name}</h1>
-      <div class="project-palettes">
+      <div class="project-palettes" id=${id}>
       </div>
     </article>`;
 
   $('.project-container').prepend(projectTemplate);
-};
-
-function prependPalette (palette) {
-  const {
-    palette_name,
-  } = palette;
 };
 
 function clearProjectInput () {
@@ -112,4 +130,31 @@ function clearProjectInput () {
 
 function clearPaletteNameInput () {
   $('.palette-name').val('');
+};
+
+const loadProjects = async () => {
+  const projects = await getProjects();
+
+  await projects.forEach(project => prependProject(project));
+};
+
+const fetchAndParse = async (url) => {
+  const intialFetch = await fetch(url);
+  return await intialFetch.json();
+};
+
+const appendProjectsToDropdown = async (projects) => {
+  const selectValues = await projects;
+
+  selectValues.forEach((selection) => {
+    const option = $(`<option>${selection.project_name}</option>`)
+      .val(`${selection.id}`);
+
+    $('#project-dropdown').append(option);
+  });
+};
+
+const getProjects = async () => {
+  const url = '/api/v1/projects';
+  return await fetchAndParse(url);
 };
