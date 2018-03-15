@@ -72,14 +72,20 @@ const removePalette = (event) => {
   $(event.target.parentElement).remove();
 };
 
-const createProject = (event) => {
+const createProject = async (event) => {
   event.preventDefault();
   const projectName = $(event.target).siblings().find('input').val();
   const project = Object.assign({ project_name: projectName });
+  const savedProject = await postProjectToDb(project);
 
-  prependProject(project);
-  //pass project to backend
+  prependProject(savedProject);
   clearProjectInput();
+};
+
+const postProjectToDb = async (project) => {
+  const url = '/api/v1/projects';
+
+  return await postAndParse(url, project);
 };
 
 const savePalette = (event) => {
@@ -146,7 +152,21 @@ const loadProjects = async () => {
 
 const fetchAndParse = async (url) => {
   const intialFetch = await fetch(url);
+
   return await intialFetch.json();
+};
+
+const postAndParse = async (url, data) => {
+  const initialFetch = await fetch(url, {
+    body: JSON.stringify(data),
+    cache: 'no-cache',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'POST'
+  });
+
+  return await initialFetch.json();
 };
 
 const appendProjectsToDropdown = async (projects) => {
