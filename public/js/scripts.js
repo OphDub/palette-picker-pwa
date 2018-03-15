@@ -7,7 +7,7 @@ $(document).ready(() => {
   generateNewPalette();
   loadProjects();
 });
-$('#project-dropdown').ready( async () => {
+$('#project-dropdown').ready(async () => {
   const projects = await getProjects();
   appendProjectsToDropdown(projects);
 });
@@ -101,21 +101,27 @@ const savePalette = (event) => {
 };
 
 const prependPalette = (projectName, palette) => {
-  palette.colors.forEach(color => {
-    const colorBlock =
-      `<article class="project-palette-color" style="background-color: ${color}">
-      </article>`;
-    const projectDiv = $(`${projectName}`);
-    console.log(projectDiv);
-
-    projectDiv.append(colorBlock);
+  const { palette_name, colors } = palette
+  const projectPalettes = $(`#${projectName}`);
+  const appendedPaletteName = $(`<span><p class="project-palette-name">${palette_name}</p></span>`);
+  const appendedPalette = $(`<span class="project-palette-colors"><span>`);
+  const appendedPalDeleteBtn = $(`<button class="project-palette-delete-btn"></button>`);
+  const paletteColors = colors.map(color => {
+    return (
+      `<article class="project-palette-color"
+        style="background-color: ${color}">
+      </article>`
+    )
   });
+
+  appendedPalette.append(appendedPaletteName, paletteColors, appendedPalDeleteBtn);
+  projectPalettes.append(appendedPalette);
 };
 
 const prependProject = (project) => {
   const { project_name, id }  = project;
   const projectTemplate =
-    `<article class="project" id=${id}>
+    `<article class="project">
       <h1 class="project-name">${project_name}</h1>
       <div class="project-palettes" id=${id}>
       </div>
