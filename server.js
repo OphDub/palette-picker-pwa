@@ -26,19 +26,20 @@ app.get('/api/v1/projects', (request, response) => {
 });
 
 app.post('/api/v1/projects', (request, response) => {
-  const project = request.body;
+  const projectInfo = request.body;
 
   for (let requiredParameter of ['project_name']) {
-    if(!project[requiredParameter]) {
+    if(!projectInfo[requiredParameter]) {
       return response.status(422).send({
         error: `Expected format: { project_name: <String> }. You are missing a "${requiredParameter}" property.`
       });
     }
   }
 
-  database('projects').insert(project, 'id')
+  database('projects').insert(projectInfo, 'id')
     .then(project => {
-      response.status(201).json({ id: project[0] });
+      const { project_name } = projectInfo;
+      response.status(201).json({ id: project[0], project_name });
     })
     .catch(error => {
       response.status(500).json({ error });
