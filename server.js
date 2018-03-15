@@ -25,6 +25,26 @@ app.get('/api/v1/projects', (request, response) => {
     });
 });
 
+app.post('/api/v1/projects', (request, response) => {
+  const project = request.body;
+
+  for (let requiredParameter of ['project_name']) {
+    if(!project[requiredParameter]) {
+      return response.status(422).send({
+        error: `Expected format: { project_name: <String> }. You are missing a "${requiredParameter}" property.`
+      });
+    }
+  }
+
+  database('projects').insert(project, 'id')
+    .then(project => {
+      response.status(201).json({ id: project[0] });
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
 app.get('/api/v1/projects/:id/', (request, response) => {
   database('projects').where('id', request.params.id).select()
     .then((projects) => {
