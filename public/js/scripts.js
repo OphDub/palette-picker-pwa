@@ -119,37 +119,30 @@ const postPaletteToDb = async (palette) => {
 };
 
 const prependPalette = (projectId, palette) => {
-  const {
-    palette_name,
-    color1,
-    color2,
-    color3,
-    color4,
-    color5
-  } = palette;
-  const projectPalettes = $(`#${projectId}`);
-  const appendedPaletteName = $(`<span><p class="project-palette-name">${palette_name}</p></span>`);
-  const appendedPalette = $(`<span class="project-palette-colors"><span>`);
-  const appendedPalDeleteBtn = $(`<button class="project-palette-delete-btn"></button>`);
+  const { palette_name } = palette;
+  const colorKeys = Object.keys(palette).filter(key => {
+    if (key.includes('color')) {
+      return key
+    }
+  });
+  const paletteColors = colorKeys.map(color => {
+    return (
+      `<article class="project-palette-color"
+        style="background-color: ${palette[color]}">
+      </article>`
+    );
+  });
+  const appendedPalette = $(
+    `<span class="project-palette-colors">
+      <span>
+        <p class="project-palette-name">${palette_name}</p>
+      </span>
+      ${paletteColors.join('')}
+      <button class="project-palette-delete-btn"></button>
+    <span>`
+  );
 
-  //change this to Object.keys to accomodate flat structure of paletteObj
-  // const paletteColors = colors.map(color => {
-  //   return (
-  //     `<article class="project-palette-color"
-  //       style="background-color: ${color1}">
-  //     </article>`
-  //   )
-  // });
-
-  const paletteColors = `
-    <article class="project-palette-color" style="background-color: ${color1}"></article>
-    <article class="project-palette-color" style="background-color: ${color2}"></article>
-    <article class="project-palette-color" style="background-color: ${color3}"></article>
-    <article class="project-palette-color" style="background-color: ${color4}"></article>
-    <article class="project-palette-color" style="background-color: ${color5}"></article>`
-
-  appendedPalette.append(appendedPaletteName, paletteColors, appendedPalDeleteBtn);
-  projectPalettes.append(appendedPalette);
+  $(`#${projectId}`).append(appendedPalette);
 };
 
 const prependProject = (project) => {
