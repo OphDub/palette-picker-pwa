@@ -1,8 +1,8 @@
 $('.generate-palette-btn').click(() => generateNewPalette());
 $('.color-box-lock-btn').click((event) => lockColor(event));
-$('.project-palette-delete-btn').click((event) => removePalette(event));
 $('.save-project-btn').click((event) => createProject(event));
 $('.save-palette-btn').click((event) => savePalette(event));
+$(document).on('click', '.project-palette-delete-btn', (event) => removePalette(event));
 $(document).ready(() => {
   generateNewPalette();
   loadProjects();
@@ -75,6 +75,12 @@ const removePalette = (event) => {
 const createProject = async (event) => {
   event.preventDefault();
   const projectName = $(event.target).siblings().find('input').val();
+
+  if(projectName === '') {
+    console.log('Hey lettuce, your project needs a name');
+    return;
+  }
+
   const project = Object.assign({ project_name: projectName });
   const savedProject = await postProjectToDb(project);
 
@@ -119,7 +125,7 @@ const postPaletteToDb = async (palette) => {
 };
 
 const prependPalette = (projectId, palette) => {
-  const { palette_name } = palette;
+  const { palette_name, id } = palette;
   const colorKeys = Object.keys(palette).filter(key => {
     if (key.includes('color')) {
       return key
@@ -133,7 +139,7 @@ const prependPalette = (projectId, palette) => {
     );
   });
   const appendedPalette = $(
-    `<span class="project-palette-colors">
+    `<span class="project-palette-colors" id=${id}>
       <span>
         <p class="project-palette-name">${palette_name}</p>
       </span>
