@@ -12,9 +12,6 @@ app.locals.title = "Palette Picker";
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.get('/', (request, response) => {
-});
-
 app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
     .then((projects) => {

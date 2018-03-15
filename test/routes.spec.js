@@ -5,10 +5,6 @@ const server = require('../server');
 
 chai.use(chaiHttp);
 
-describe('Client Routes', () => {
-
-});
-
 describe('API Routes', () => {
   describe('GET /api/v1/projects', () => {
     it('should return all the projects', () => {
