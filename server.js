@@ -148,3 +148,5 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} running on PORT ${app.get('port')}.`);
 });
+
+module.exports = app;
