@@ -1,8 +1,8 @@
 $('.generate-palette-btn').click(() => generateNewPalette());
 $('.color-box-lock-btn').click((event) => lockColor(event));
-$('.project-palette-delete-btn').click((event) => removePalette(event));
 $('.save-project-btn').click((event) => createProject(event));
 $('.save-palette-btn').click((event) => savePalette(event));
+$(document).on('click', '.project-palette-delete-btn', (event) => removePalette(event));
 $(document).ready(() => {
   generateNewPalette();
   loadProjects();
@@ -70,11 +70,25 @@ const removePalette = (event) => {
   const { id } = event.target.parentElement;
 
   $(event.target.parentElement).remove();
+  deletePaletteFromDb(id);
+};
+
+const deletePaletteFromDb = async (paletteId) => {
+  const url = `/api/v1/palettes/${paletteId}/`;
+  const data = { palette_id: paletteId }
+
+  await deleteFromDb(url, data);
 };
 
 const createProject = async (event) => {
   event.preventDefault();
   const projectName = $(event.target).siblings().find('input').val();
+
+  if(projectName === '') {
+    console.log('Hey lettuce, your project needs a name');
+    return;
+  }
+
   const project = Object.assign({ project_name: projectName });
   const savedProject = await postProjectToDb(project);
 
@@ -119,37 +133,30 @@ const postPaletteToDb = async (palette) => {
 };
 
 const prependPalette = (projectId, palette) => {
-  const {
-    palette_name,
-    color1,
-    color2,
-    color3,
-    color4,
-    color5
-  } = palette;
-  const projectPalettes = $(`#${projectId}`);
-  const appendedPaletteName = $(`<span><p class="project-palette-name">${palette_name}</p></span>`);
-  const appendedPalette = $(`<span class="project-palette-colors"><span>`);
-  const appendedPalDeleteBtn = $(`<button class="project-palette-delete-btn"></button>`);
+  const { palette_name, id } = palette;
+  const colorKeys = Object.keys(palette).filter(key => {
+    if (key.includes('color')) {
+      return key
+    }
+  });
+  const paletteColors = colorKeys.map(color => {
+    return (
+      `<article class="project-palette-color"
+        style="background-color: ${palette[color]}">
+      </article>`
+    );
+  });
+  const appendedPalette = $(
+    `<span class="project-palette-colors" id=${id}>
+      <span>
+        <p class="project-palette-name">${palette_name}</p>
+      </span>
+      ${paletteColors.join('')}
+      <button class="project-palette-delete-btn"></button>
+    <span>`
+  );
 
-  //change this to Object.keys to accomodate flat structure of paletteObj
-  // const paletteColors = colors.map(color => {
-  //   return (
-  //     `<article class="project-palette-color"
-  //       style="background-color: ${color1}">
-  //     </article>`
-  //   )
-  // });
-
-  const paletteColors = `
-    <article class="project-palette-color" style="background-color: ${color1}"></article>
-    <article class="project-palette-color" style="background-color: ${color2}"></article>
-    <article class="project-palette-color" style="background-color: ${color3}"></article>
-    <article class="project-palette-color" style="background-color: ${color4}"></article>
-    <article class="project-palette-color" style="background-color: ${color5}"></article>`
-
-  appendedPalette.append(appendedPaletteName, paletteColors, appendedPalDeleteBtn);
-  projectPalettes.append(appendedPalette);
+  $(`#${projectId}`).append(appendedPalette);
 };
 
 const prependProject = (project) => {
@@ -209,6 +216,17 @@ const postAndParse = async (url, data) => {
   });
 
   return await initialFetch.json();
+};
+
+const deleteFromDb = async (url, data) => {
+  await fetch(url, {
+    body: JSON.stringify(data),
+    cache: 'no-cache',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'DELETE'
+  })
 };
 
 const appendProjectsToDropdown = async (projects) => {

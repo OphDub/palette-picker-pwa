@@ -109,6 +109,26 @@ app.post('/api/v1/palettes', (request, response) => {
     });
 });
 
+app.delete('/api/v1/palettes/:id/', (request, response) => {
+  const palette = request.body;
+
+  for(let requiredParameter of ['palette_id']) {
+    if(!palette[requiredParameter]) {
+      return response.status(422).send({
+        error: `Expected format: { palette_id: <Number> }. You are missing a "${requiredParameter}" property.`
+      });
+    }
+  }
+
+  database('palettes').where('id', request.params.id).del()
+    .then(palette => {
+      response.status(204);
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
 app.get('/api/v1/projects/:id/palettes', (request, response) => {
   database('palettes').where('project_id', request.params.id).select()
     .then((palettes) => {
