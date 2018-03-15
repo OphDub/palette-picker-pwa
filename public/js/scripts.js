@@ -185,9 +185,11 @@ const loadProjects = async () => {
 const loadPalettes = async (projectId) => {
   const palettes = await getPalettesWithProjectId(projectId);
 
-  await palettes.forEach(palette => {
-    prependPalette(projectId, palette);
-  });
+  if (palettes.length) {
+    await palettes.forEach(palette => {
+      prependPalette(projectId, palette);
+    });
+  }
 };
 
 const fetchAndParse = async (url) => {
