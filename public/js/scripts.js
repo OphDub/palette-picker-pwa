@@ -70,6 +70,14 @@ const removePalette = (event) => {
   const { id } = event.target.parentElement;
 
   $(event.target.parentElement).remove();
+  deletePaletteFromDb(id);
+};
+
+const deletePaletteFromDb = async (paletteId) => {
+  const url = `/api/v1/palettes/${paletteId}/`;
+  const data = { palette_id: paletteId }
+
+  await deleteFromDb(url, data);
 };
 
 const createProject = async (event) => {
@@ -208,6 +216,17 @@ const postAndParse = async (url, data) => {
   });
 
   return await initialFetch.json();
+};
+
+const deleteFromDb = async (url, data) => {
+  await fetch(url, {
+    body: JSON.stringify(data),
+    cache: 'no-cache',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'DELETE'
+  })
 };
 
 const appendProjectsToDropdown = async (projects) => {
