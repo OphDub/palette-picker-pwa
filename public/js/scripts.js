@@ -88,37 +88,65 @@ const postProjectToDb = async (project) => {
   return await postAndParse(url, project);
 };
 
-const savePalette = (event) => {
+const savePalette = async (event) => {
   event.preventDefault();
   const paletteName = $('.palette-name').val();
   const projectName = $('#project-dropdown').val();
   const colorBoxes = $('.palette').children('article');
-  const colors = Array.from(colorBoxes).map(box => box.innerText);
-  const palette = Object.assign({ palette_name: paletteName, colors });
 
   if (paletteName === '') {
     console.log('Give your palette a name you lettuce');
     return;
   }
 
-  prependPalette(projectName, palette);
-  //pass palette to backend
+  const colors = Array.from(colorBoxes).map(box => box.innerText);
+  const colorObj = colors.reduce((colorObj, color, index) => {
+    colorObj[`color${index+1}`] = color;
+
+    return colorObj;
+  }, {});
+  const palette = Object.assign({ palette_name: paletteName, project_id: projectName ,...colorObj });
+  const savedPalette = await postPaletteToDb(palette);
+
+  prependPalette(projectName, savedPalette);
   clearPaletteNameInput();
 };
 
+const postPaletteToDb = async (palette) => {
+  const url = '/api/v1/palettes';
+
+  return await postAndParse(url, palette);
+};
+
 const prependPalette = (projectName, palette) => {
-  const { palette_name, colors } = palette
+  const {
+    palette_name,
+    color1,
+    color2,
+    color3,
+    color4,
+    color5
+  } = palette;
   const projectPalettes = $(`#${projectName}`);
   const appendedPaletteName = $(`<span><p class="project-palette-name">${palette_name}</p></span>`);
   const appendedPalette = $(`<span class="project-palette-colors"><span>`);
   const appendedPalDeleteBtn = $(`<button class="project-palette-delete-btn"></button>`);
-  const paletteColors = colors.map(color => {
-    return (
-      `<article class="project-palette-color"
-        style="background-color: ${color}">
-      </article>`
-    )
-  });
+
+  //change this to Object.keys to accomodate flat structure of paletteObj
+  // const paletteColors = colors.map(color => {
+  //   return (
+  //     `<article class="project-palette-color"
+  //       style="background-color: ${color1}">
+  //     </article>`
+  //   )
+  // });
+
+  const paletteColors = `
+    <article class="project-palette-color" style="background-color: ${color1}"></article>
+    <article class="project-palette-color" style="background-color: ${color2}"></article>
+    <article class="project-palette-color" style="background-color: ${color3}"></article>
+    <article class="project-palette-color" style="background-color: ${color4}"></article>
+    <article class="project-palette-color" style="background-color: ${color5}"></article>`
 
   appendedPalette.append(appendedPaletteName, paletteColors, appendedPalDeleteBtn);
   projectPalettes.append(appendedPalette);
@@ -130,6 +158,7 @@ const prependProject = (project) => {
     `<article class="project">
       <h1 class="project-name">${project_name}</h1>
       <div class="project-palettes" id=${id}>
+
       </div>
     </article>`;
 
