@@ -83,7 +83,7 @@ const deletePaletteFromDb = async (paletteId) => {
 const createProject = async (event) => {
   event.preventDefault();
   const projectName = $(event.target).siblings().find('input').val();
-
+  
   if(projectName === '') {
     console.log('Hey lettuce, your project needs a name');
     return;
