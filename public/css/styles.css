@@ -106,9 +106,35 @@ main {
   height: 15px;
 }
 
+.palette-name {
+  font-family: 'Comfortaa', cursive;
+  padding: 10px;
+  border: none;
+}
+
+.save-palette-btn {
+  font-family: 'Comfortaa', cursive;
+  padding: 10px;
+}
+
+.save-palette-btn:hover {
+  cursor: pointer;
+  color: #FFFFFF;
+  background: #1BCFEE;
+}
+
 #project-dropdown {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   padding: 10px;
   font-family: 'Comfortaa', cursive;
+}
+
+#project-dropdown:hover {
+  cursor: pointer;
+  color: #FFFFFF;
+  background: #1BCFEE;
 }
 
 #project-dropdown option {
