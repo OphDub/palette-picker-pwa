@@ -12,9 +12,6 @@ app.locals.title = "Palette Picker";
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.get('/', (request, response) => {
-});
-
 app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
     .then((projects) => {
@@ -110,19 +107,15 @@ app.post('/api/v1/palettes', (request, response) => {
 });
 
 app.delete('/api/v1/palettes/:id/', (request, response) => {
-  const palette = request.body;
-
-  for(let requiredParameter of ['palette_id']) {
-    if(!palette[requiredParameter]) {
-      return response.status(422).send({
-        error: `Expected format: { palette_id: <Number> }. You are missing a "${requiredParameter}" property.`
-      });
-    }
-  }
-
   database('palettes').where('id', request.params.id).del()
     .then(palette => {
-      response.status(204);
+      if (palette) {
+        response.status(204).json();
+      } else {
+        response.status(404).json({
+          error: `Could not find palette with id ${request.params.id}`
+        })
+      }
     })
     .catch(error => {
       response.status(500).json({ error });
@@ -148,3 +141,5 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} running on PORT ${app.get('port')}.`);
 });
+
+module.exports = app;

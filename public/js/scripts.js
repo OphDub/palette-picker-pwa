@@ -51,7 +51,9 @@ const generateNewPalette = () => {
 };
 
 const generateRandomHex = () => {
-  return '#'+Math.random().toString(16).slice(-6)
+  return (
+    '#' + Math.random().toString(16).slice(-6)
+  );
 };
 
 const lockColor = (event) => {
@@ -93,6 +95,10 @@ const createProject = async (event) => {
   const savedProject = await postProjectToDb(project);
 
   prependProject(savedProject);
+
+  const savedProjects = await getProjects();
+  appendProjectsToDropdown(savedProjects);
+
   clearProjectInput();
 };
 
@@ -119,7 +125,11 @@ const savePalette = async (event) => {
 
     return colorObj;
   }, {});
-  const palette = Object.assign({ palette_name: paletteName, project_id: projectName ,...colorObj });
+  const palette = Object.assign({
+    palette_name: paletteName,
+    project_id: projectName,
+    ...colorObj
+  });
   const savedPalette = await postPaletteToDb(palette);
 
   prependPalette(projectName, savedPalette);
@@ -200,37 +210,51 @@ const loadPalettes = async (projectId) => {
 };
 
 const fetchAndParse = async (url) => {
-  const intialFetch = await fetch(url);
+  try {
+    const intialFetch = await fetch(url);
 
-  return await intialFetch.json();
+    return await intialFetch.json();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const postAndParse = async (url, data) => {
-  const initialFetch = await fetch(url, {
-    body: JSON.stringify(data),
-    cache: 'no-cache',
-    headers: {
-      'content-type': 'application/json'
-    },
-    method: 'POST'
-  });
+  try {
+    const initialFetch = await fetch(url, {
+      body: JSON.stringify(data),
+      cache: 'no-cache',
+      headers: {
+        'content-type': 'application/json'
+      },
+      method: 'POST'
+    });
 
-  return await initialFetch.json();
+    return await initialFetch.json();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const deleteFromDb = async (url, data) => {
-  await fetch(url, {
-    body: JSON.stringify(data),
-    cache: 'no-cache',
-    headers: {
-      'content-type': 'application/json'
-    },
-    method: 'DELETE'
-  })
+  try {
+    await fetch(url, {
+      body: JSON.stringify(data),
+      cache: 'no-cache',
+      headers: {
+        'content-type': 'application/json'
+      },
+      method: 'DELETE'
+    })
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const appendProjectsToDropdown = async (projects) => {
   const selectValues = await projects;
+
+  $('#project-dropdown').empty();
 
   selectValues.forEach((selection) => {
     const option = $(`<option>${selection.project_name}</option>`)
