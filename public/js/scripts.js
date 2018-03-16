@@ -90,13 +90,13 @@ const prependPalette = (projectId, palette) => {
     );
   });
   const appendedPalette = $(
-    `<span class="project-palette-colors" id=${id}>
-      <span>
+    `<article class="project-palette-colors" id=${id}>
+      <span class="project-pal-name-span">
         <p class="project-palette-name">${palette_name}</p>
       </span>
       ${paletteColors.join('')}
       <button class="project-palette-delete-btn"></button>
-    <span>`
+    <article>`
   );
 
   $(`#${projectId}`).append(appendedPalette);
