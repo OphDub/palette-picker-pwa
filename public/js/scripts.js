@@ -75,37 +75,35 @@ const removePalette = (event) => {
   deletePaletteFromDb(id);
 };
 
-const deletePaletteFromDb = async (paletteId) => {
-  const url = `/api/v1/palettes/${paletteId}/`;
-  const data = { palette_id: paletteId }
+const prependPalette = (projectId, palette) => {
+  const { palette_name, id } = palette;
+  const colorKeys = Object.keys(palette).filter(key => {
+    if (key.includes('color')) {
+      return key
+    }
+  });
+  const paletteColors = colorKeys.map(color => {
+    return (
+      `<article class="project-palette-color"
+        style="background-color: ${palette[color]}">
+      </article>`
+    );
+  });
+  const appendedPalette = $(
+    `<span class="project-palette-colors" id=${id}>
+      <span>
+        <p class="project-palette-name">${palette_name}</p>
+      </span>
+      ${paletteColors.join('')}
+      <button class="project-palette-delete-btn"></button>
+    <span>`
+  );
 
-  await deleteFromDb(url, data);
+  $(`#${projectId}`).append(appendedPalette);
 };
 
-const createProject = async (event) => {
-  event.preventDefault();
-  const projectName = $(event.target).siblings().find('input').val();
-
-  if(projectName === '') {
-    console.log('Hey lettuce, your project needs a name');
-    return;
-  }
-
-  const project = Object.assign({ project_name: projectName });
-  const savedProject = await postProjectToDb(project);
-
-  prependProject(savedProject);
-
-  const savedProjects = await getProjects();
-  appendProjectsToDropdown(savedProjects);
-
-  clearProjectInput();
-};
-
-const postProjectToDb = async (project) => {
-  const url = '/api/v1/projects';
-
-  return await postAndParse(url, project);
+const clearPaletteNameInput = () => {
+  $('.palette-name').val('');
 };
 
 const savePalette = async (event) => {
@@ -136,37 +134,33 @@ const savePalette = async (event) => {
   clearPaletteNameInput();
 };
 
+const loadPalettes = async (projectId) => {
+  const palettes = await getPalettesWithProjectId(projectId);
+
+  if (palettes.length) {
+    await palettes.forEach(palette => {
+      prependPalette(projectId, palette);
+    });
+  }
+};
+
+const getPalettesWithProjectId = async (projectId) => {
+  const url = `/api/v1/projects/${projectId}/palettes`;
+
+  return await fetchAndParse(url);
+};
+
+const deletePaletteFromDb = async (paletteId) => {
+  const url = `/api/v1/palettes/${paletteId}/`;
+  const data = { palette_id: paletteId }
+
+  await deleteFromDb(url, data);
+};
+
 const postPaletteToDb = async (palette) => {
   const url = '/api/v1/palettes';
 
   return await postAndParse(url, palette);
-};
-
-const prependPalette = (projectId, palette) => {
-  const { palette_name, id } = palette;
-  const colorKeys = Object.keys(palette).filter(key => {
-    if (key.includes('color')) {
-      return key
-    }
-  });
-  const paletteColors = colorKeys.map(color => {
-    return (
-      `<article class="project-palette-color"
-        style="background-color: ${palette[color]}">
-      </article>`
-    );
-  });
-  const appendedPalette = $(
-    `<span class="project-palette-colors" id=${id}>
-      <span>
-        <p class="project-palette-name">${palette_name}</p>
-      </span>
-      ${paletteColors.join('')}
-      <button class="project-palette-delete-btn"></button>
-    <span>`
-  );
-
-  $(`#${projectId}`).append(appendedPalette);
 };
 
 const prependProject = (project) => {
@@ -186,8 +180,46 @@ const clearProjectInput = () => {
   $('#project-name-input').val('');
 };
 
-const clearPaletteNameInput = () => {
-  $('.palette-name').val('');
+const validateProjectName = (projectName) => {
+  const existingProjects = $('.project-name').toArray();
+
+  const dupeName = Array.from(existingProjects).find(project => {
+    return project.innerText.toUpperCase() === projectName.toUpperCase()
+  });
+
+  if(projectName === '') {
+    const errorMsg = `<h3>Hey lettuce, your project needs a name</h3>`;
+
+    $('.project-error').append(errorMsg);
+    return true;
+  } else if (dupeName) {
+    const errorMsg = `<h3>Hey lettuce, project named "${dupeName.innerText}" already exists</h3>`
+
+    $('.project-error').append(errorMsg);
+    return true;
+  }
+
+  return false;
+};
+
+const createProject = async (event) => {
+  event.preventDefault();
+  $('.project-error').empty();
+  const projectName = $(event.target).siblings().find('input').val();
+
+  if(validateProjectName(projectName)) {
+    return;
+  }
+
+  const project = Object.assign({ project_name: projectName });
+  const savedProject = await postProjectToDb(project);
+
+  prependProject(savedProject);
+
+  const savedProjects = await getProjects();
+  appendProjectsToDropdown(savedProjects);
+
+  clearProjectInput();
 };
 
 const loadProjects = async () => {
@@ -199,14 +231,29 @@ const loadProjects = async () => {
   });
 };
 
-const loadPalettes = async (projectId) => {
-  const palettes = await getPalettesWithProjectId(projectId);
+const getProjects = async () => {
+  const url = '/api/v1/projects';
 
-  if (palettes.length) {
-    await palettes.forEach(palette => {
-      prependPalette(projectId, palette);
-    });
-  }
+  return await fetchAndParse(url);
+};
+
+const postProjectToDb = async (project) => {
+  const url = '/api/v1/projects';
+
+  return await postAndParse(url, project);
+};
+
+const appendProjectsToDropdown = async (projects) => {
+  const selectValues = await projects;
+
+  $('#project-dropdown').empty();
+
+  selectValues.forEach((selection) => {
+    const option = $(`<option>${selection.project_name}</option>`)
+      .val(`${selection.id}`);
+
+    $('#project-dropdown').append(option);
+  });
 };
 
 const fetchAndParse = async (url) => {
@@ -249,29 +296,4 @@ const deleteFromDb = async (url, data) => {
   } catch (error) {
     console.log(error);
   }
-};
-
-const appendProjectsToDropdown = async (projects) => {
-  const selectValues = await projects;
-
-  $('#project-dropdown').empty();
-
-  selectValues.forEach((selection) => {
-    const option = $(`<option>${selection.project_name}</option>`)
-      .val(`${selection.id}`);
-
-    $('#project-dropdown').append(option);
-  });
-};
-
-const getProjects = async () => {
-  const url = '/api/v1/projects';
-
-  return await fetchAndParse(url);
-};
-
-const getPalettesWithProjectId = async (projectId) => {
-  const url = `/api/v1/projects/${projectId}/palettes`;
-
-  return await fetchAndParse(url);
 };
