@@ -17,8 +17,8 @@ main {
 }
 
 .palette-picker-logo {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   background: url('../assets/paint-buck-icon.svg');
   background-size: cover;
   background-position: center;
@@ -140,7 +140,7 @@ main {
 
 .project-container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   width: 90vw;
   justify-content: space-between;
 }
@@ -149,12 +149,19 @@ main {
   border: 1px solid black;
   padding: 15px;
   margin: 15px 0;
+  min-width: 300px;
+  max-height: 150px;
 }
 
 .project-name {
   margin: 15px 0;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.project-palettes {
+  max-height: 100px;
+  overflow-y: auto;
 }
 
 .project-palette {
@@ -165,7 +172,9 @@ main {
 
 .project-palette-colors {
   display: flex;
-  flex-direction: row:;
+  flex-direction: row;
+  margin: 10px 0;
+  justify-content: space-between;
 }
 
 .project-palette-color {
@@ -180,4 +189,22 @@ main {
   background-size: cover;
   background-position: center;
   background-image: url("../assets/trash.svg");
+}
+
+@media (max-width: 850px) {
+  .project-container {
+    flex-wrap: nowrap;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 700px) {
+  .palette-picker-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .palette-picker-hdr-txt {
+    font-size: 55px;
+  }
 }
