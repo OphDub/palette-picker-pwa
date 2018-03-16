@@ -97,7 +97,7 @@ main {
 
 .generate-palette-btn:hover {
   cursor: pointer;
-  background-color: red;
+  background: #1BCFEE;
   color: white;
 }
 
@@ -116,7 +116,18 @@ main {
   font-family: 'Comfortaa', cursive;
 }
 
-#project-name-input {
+.create-project-form {
+  display: flex;
+  flex-direction: row;
+}
+
+.create-project-hdr {
+  font-weight: 700;
+  align-self: center;
+  margin-right: 10px;
+}
+
+.project-name-input {
   padding: 10px;
   font-family: 'Comfortaa', cursive;
 }
@@ -124,6 +135,12 @@ main {
 .save-project-btn {
   padding: 10px;
   font-family: 'Comfortaa', cursive;
+}
+
+.save-project-btn:hover {
+  cursor: pointer;
+  color:#FFFFFF;
+  background: #1BCFEE;
 }
 
 .saved-projects {
@@ -150,7 +167,7 @@ main {
   padding: 15px;
   margin: 15px 0;
   min-width: 300px;
-  max-height: 150px;
+  min-height: 150px;
 }
 
 .project-name {
