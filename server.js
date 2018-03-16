@@ -107,19 +107,15 @@ app.post('/api/v1/palettes', (request, response) => {
 });
 
 app.delete('/api/v1/palettes/:id/', (request, response) => {
-  const palette = request.body;
-
-  for(let requiredParameter of ['palette_id']) {
-    if(!palette[requiredParameter]) {
-      return response.status(422).send({
-        error: `Expected format: { palette_id: <Number> }. You are missing a "${requiredParameter}" property.`
-      });
-    }
-  }
-
   database('palettes').where('id', request.params.id).del()
     .then(palette => {
-      response.status(204);
+      if (palette) {
+        response.status(204).json();
+      } else {
+        response.status(404).json({
+          error: `Could not find palette with id ${request.params.id}`
+        })
+      }
     })
     .catch(error => {
       response.status(500).json({ error });
