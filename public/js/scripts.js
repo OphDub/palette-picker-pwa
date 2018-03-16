@@ -180,12 +180,34 @@ const clearProjectInput = () => {
   $('#project-name-input').val('');
 };
 
-const createProject = async (event) => {
-  event.preventDefault();
-  const projectName = $(event.target).siblings().find('input').val();
+const validateProjectName = (projectName) => {
+  const existingProjects = $('.project-name').toArray();
+
+  const dupeName = Array.from(existingProjects).find(project => {
+    return project.innerText.toUpperCase() === projectName.toUpperCase()
+  });
 
   if(projectName === '') {
-    console.log('Hey lettuce, your project needs a name');
+    const errorMsg = `<h3>Hey lettuce, your project needs a name</h3>`;
+
+    $('.project-error').append(errorMsg);
+    return true;
+  } else if (dupeName) {
+    const errorMsg = `<h3>Hey lettuce, project named "${dupeName.innerText}" already exists</h3>`
+
+    $('.project-error').append(errorMsg);
+    return true;
+  }
+
+  return false;
+};
+
+const createProject = async (event) => {
+  event.preventDefault();
+  $('.project-error').empty();
+  const projectName = $(event.target).siblings().find('input').val();
+
+  if(validateProjectName(projectName)) {
     return;
   }
 
