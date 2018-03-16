@@ -6,36 +6,39 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Palette-Picker</title>
     <link rel="stylesheet" href="./css/reset.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa:300,700|Righteous" rel="stylesheet">
     <link rel="stylesheet" href="./css/styles.css">
   </head>
   <body>
     <main>
-      <h1>Palette Picker</h1>
+      <header class="palette-picker-hdr">
+        <div class="palette-picker-logo"></div>
+        <h1 class="palette-picker-hdr-txt">Palette Picker</h1>
+      </header>
       <section class="palette-picker">
         <article class="palette">
           <article class="color-boxes" id="color-1">
             <button class="color-box-lock-btn lock-open" id="color-1-lock-btn"></button>
-            <h5 id="color-1-text"></h5>
+            <h5 class="color-text" id="color-1-text"></h5>
           </article>
           <article class="color-boxes" id="color-2">
             <button class="color-box-lock-btn lock-open" id="color-2-lock-btn"></button>
-            <h5 id="color-2-text"></h5>
+            <h5 class="color-text" id="color-2-text"></h5>
           </article>
           <article class="color-boxes" id="color-3">
             <button class="color-box-lock-btn lock-open" id="color-3-lock-btn"></button>
-            <h5 id="color-3-text"></h5>
+            <h5 class="color-text" id="color-3-text"></h5>
           </article>
           <article class="color-boxes" id="color-4">
             <button class="color-box-lock-btn lock-open" id="color-4-lock-btn"></button>
-            <h5 id="color-4-text"></h5>
+            <h5 class="color-text" id="color-4-text"></h5>
           </article>
           <article class="color-boxes" id="color-5">
             <button class="color-box-lock-btn lock-open" id="color-5-lock-btn"></button>
-            <h5 id="color-5-text"></h5>
+            <h5 class="color-text" id="color-5-text"></h5>
           </article>
         </article>
-        <button class="generate-palette-btn">Generate New Palette!</button>
+        <button class="generate-palette-btn">Generate New Palette</button>
         <form class="new-palette-form">
           <select name="projects" id="project-dropdown"></select>
           <input type="text" class="palette-name" placeholder="Palette Name">

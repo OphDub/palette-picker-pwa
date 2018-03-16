@@ -4,21 +4,47 @@ main {
   align-items: center;
   min-height: 100vh;
   min-width: 100vw;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Comfortaa', cursive;
+}
+
+.palette-picker-hdr {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.palette-picker-logo {
+  width: 100px;
+  height: 100px;
+  background: url('../assets/paint-buck-icon.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.palette-picker-hdr-txt {
+  font-family: 'Righteous', cursive;
+  font-size: 80px;
 }
 
 .palette-picker {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
+  padding: 50px 0;
   border-bottom: 1px solid black;
-  min-width: 90%;
+  min-width: 100%;
+  background: url('../assets/hardwood-698871_1920.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
 .palette {
   display: flex;
   flex-direction: row;
+  padding: 15px 0;
 }
 
 .color-boxes {
@@ -26,19 +52,32 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  border: 1px solid black;
+  border: 5px solid #FFFFFF;
   height: 100px;
   width: 75px;
-  margin: 0px 5px;
   padding: 10px;
+}
+
+.color-text {
+  color: #FFFFFF;
+  padding: 5px;
+  background: rgba(0,0,0,0.5)
 }
 
 .color-box-lock-btn {
   width: 30px;
   height: 30px;
-  background: rgba(0,0,0,0);
+  margin-bottom: 10px;
+  border: none;
+  background: rgba(0,0,0,0.5);
   background-size: cover;
   background-position: center;
+  padding: 5px;
+}
+
+.color-box-lock-btn:hover {
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .lock-open {
@@ -47,6 +86,44 @@ main {
 
 .lock-closed {
   background-image: url("../assets/locked.svg");
+  margin-bottom: 5px;
+}
+
+.generate-palette-btn {
+  padding: 10px;
+  font-family: 'Comfortaa', cursive;
+  border: none;
+}
+
+.generate-palette-btn:hover {
+  cursor: pointer;
+  background-color: red;
+  color: white;
+}
+
+.new-palette-form {
+  margin: 15px 0;
+  height: 15px;
+}
+
+#project-dropdown {
+  padding: 10px;
+  font-family: 'Comfortaa', cursive;
+}
+
+#project-dropdown option {
+  padding: 10px;
+  font-family: 'Comfortaa', cursive;
+}
+
+#project-name-input {
+  padding: 10px;
+  font-family: 'Comfortaa', cursive;
+}
+
+.save-project-btn {
+  padding: 10px;
+  font-family: 'Comfortaa', cursive;
 }
 
 .saved-projects {
@@ -71,7 +148,13 @@ main {
 .project {
   border: 1px solid black;
   padding: 15px;
-  margin: 15px;
+  margin: 15px 0;
+}
+
+.project-name {
+  margin: 15px 0;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .project-palette {
