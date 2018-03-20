@@ -5,17 +5,18 @@ const bodyParser = require('body-parser');
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
+const forceHttps = (request, response, next) => {
+  if(request.header('x-forwarded-proto') !== 'https' && environment === 'production'){
+    response.redirect('https://' + request.header('host') + request.url);
+  }else{
+    next();
+  }
+};
 
 app.set('port', process.env.PORT || 3000);
 app.locals.title = "Palette Picker";
 
-app.use(function(req, res, next){
-  if(req.header('x-forwarded-proto') !== 'https'){
-    res.redirect('https://' + req.header('host') + req.url);
-  }else{
-    next();
-  }
-});
+app.use(forceHttps);
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
