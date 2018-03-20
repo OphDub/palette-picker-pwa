@@ -9,6 +9,13 @@ const database = require('knex')(configuration);
 app.set('port', process.env.PORT || 3000);
 app.locals.title = "Palette Picker";
 
+app.use(function(req, res, next){
+  if(req.header('x-forwarded-proto') !== 'https'){
+    res.redirect('https://' + req.header('host') + req.url);
+  }else{
+    next();
+  }
+});
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
