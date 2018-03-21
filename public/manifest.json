@@ -10,7 +10,7 @@
       "src": "./assets/paint-buck-icon.svg",
       "type": "image/svg",
       "sizes": "256x256",
-    }
+    },
   ],
-  "start_url": "/"
+  "start_url": "https://ow-palette-picker-pwa.herokuapp.com/"
 }
